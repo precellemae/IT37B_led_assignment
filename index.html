@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>my lights ˚✧</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Caveat:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --cream:   #fdf6f0;
+      --pink:    #ffd6e0;
+      --pink2:   #ffb3c6;
+      --purple:  #e8d5f5;
+      --purple2: #c9a8e8;
+      --mint:    #d4f5e9;
+      --mint2:   #a8e6cf;
+      --yellow:  #fff3cd;
+      --yellow2: #ffd166;
+      --blue:    #daeeff;
+      --text:    #5a4a6a;
+      --subtext: #9b8aaa;
+      --border:  #eddff5;
+      --white:   #ffffff;
+      --red-led:    #ff6b8a;
+      --green-led:  #56c596;
+      --yellow-led: #ffc145;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: var(--cream);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    /* ── banner ── */
+    .banner {
+      height: 140px;
+      background: linear-gradient(135deg, #ffd6e0, #e8d5f5, #daeeff);
+      position: relative;
+      overflow: hidden;
+    }
+    .banner::before {
+      content: '✦ ˚ · . ˚ ✦ · ˚ . · ✦ ˚ · . ˚ ✦ · ˚ . ·';
+      position: absolute; bottom: 12px; left: 20px;
+      font-size: .75rem; color: rgba(255,255,255,.7); letter-spacing: 4px;
+    }
+    .banner-blob {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(30px);
+      opacity: .5;
+    }
+    .blob1 { width:120px; height:120px; background:#ffb3c6; top:-20px; left:40px; }
+    .blob2 { width:100px; height:100px; background:#c9a8e8; top:10px; left:200px; }
+    .blob3 { width:80px;  height:80px;  background:#a8e6cf; top:-10px; right:150px; }
+    .blob4 { width:90px;  height:90px;  background:#ffd166; bottom:-20px; right:60px; }
+
+    /* ── avatar ── */
+    .avatar {
+      width: 72px; height: 72px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--pink2), var(--purple2));
+      border: 4px solid var(--white);
+      margin: -36px 0 0 40px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.8rem;
+      box-shadow: 0 4px 16px rgba(180,130,220,.25);
+      position: relative; z-index: 2;
+    }
+
+    /* ── page wrap ── */
+    .page {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 0 32px 60px;
+    }
+
+    .page-title {
+      font-family: 'Caveat', cursive;
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: var(--text);
+      margin: 14px 0 6px;
+    }
+    .page-sub {
+      font-size: .8rem;
+      color: var(--subtext);
+      margin-bottom: 28px;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .online-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--mint2);
+      display: inline-block;
+      box-shadow: 0 0 6px var(--mint2);
+    }
+    .offline-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: #ffb3b3;
+      display: inline-block;
+    }
+
+    /* ── layout ── */
+    .layout {
+      display: grid;
+      grid-template-columns: 1fr 280px;
+      gap: 20px;
+    }
+
+    /* ── section label ── */
+    .sec-label {
+      font-family: 'Caveat', cursive;
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--purple2);
+      margin-bottom: 14px;
+      display: flex; align-items: center; gap: 6px;
+    }
+
+    /* ── LED cards ── */
+    .led-cards { display: flex; flex-direction: column; gap: 14px; margin-bottom: 24px; }
+
+    .led-card {
+      background: var(--white);
+      border-radius: 18px;
+      padding: 18px 22px;
+      display: flex; align-items: center; gap: 18px;
+      border: 2px solid var(--border);
+      transition: border-color .3s, box-shadow .3s;
+      position: relative; overflow: hidden;
+    }
+    .led-card::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 3px;
+      border-radius: 18px 18px 0 0;
+      background: var(--border);
+      transition: background .3s;
+    }
+    .led-card.on-red    { border-color: #ffc0cb; box-shadow: 0 4px 20px rgba(255,107,138,.12); }
+    .led-card.on-green  { border-color: #b2f0d6; box-shadow: 0 4px 20px rgba(86,197,150,.12); }
+    .led-card.on-yellow { border-color: #ffe5a0; box-shadow: 0 4px 20px rgba(255,193,69,.12); }
+    .led-card.on-red::before    { background: linear-gradient(90deg, #ffb3c6, #ffd6e0); }
+    .led-card.on-green::before  { background: linear-gradient(90deg, #a8e6cf, #d4f5e9); }
+    .led-card.on-yellow::before { background: linear-gradient(90deg, #ffd166, #fff3cd); }
+
+    /* orb */
+    .orb {
+      width: 52px; height: 52px; border-radius: 50%;
+      background: #f0eaf5;
+      border: 2px solid var(--border);
+      flex-shrink: 0;
+      cursor: pointer;
+      transition: all .35s ease;
+      position: relative;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.2rem;
+    }
+    .orb::after {
+      content: '';
+      position: absolute; top: 8px; left: 10px;
+      width: 10px; height: 6px;
+      background: rgba(255,255,255,.55);
+      border-radius: 50%;
+      transform: rotate(-35deg);
+      pointer-events: none;
+    }
+    .on-red    .orb { background: radial-gradient(circle at 35% 35%, #ff8fa3, #e8294a); border-color: var(--red-led);    box-shadow: 0 0 18px rgba(255,107,138,.5), 0 0 40px rgba(255,107,138,.2); }
+    .on-green  .orb { background: radial-gradient(circle at 35% 35%, #7ee8bb, #2daa78); border-color: var(--green-led);  box-shadow: 0 0 18px rgba(86,197,150,.5),  0 0 40px rgba(86,197,150,.2); }
+    .on-yellow .orb { background: radial-gradient(circle at 35% 35%, #ffe080, #f5a800); border-color: var(--yellow-led); box-shadow: 0 0 18px rgba(255,193,69,.5),  0 0 40px rgba(255,193,69,.2); }
+
+    .led-info { flex: 1; }
+    .led-name {
+      font-family: 'Caveat', cursive;
+      font-size: 1.3rem; font-weight: 700;
+      color: var(--text); margin-bottom: 2px;
+    }
+    .led-state {
+      font-size: .75rem; color: var(--subtext);
+    }
+    .led-state.is-on { color: var(--green-led); font-weight: 700; }
+
+    /* toggle switch */
+    .toggle { position: relative; width: 52px; height: 28px; flex-shrink: 0; }
+    .toggle input { display: none; }
+    .toggle-track {
+      position: absolute; inset: 0;
+      background: #ede5f5;
+      border-radius: 14px;
+      cursor: pointer;
+      transition: background .3s;
+      border: 2px solid var(--border);
+    }
+    .toggle-track::after {
+      content: '';
+      position: absolute; top: 3px; left: 3px;
+      width: 18px; height: 18px; border-radius: 50%;
+      background: var(--white);
+      box-shadow: 0 2px 6px rgba(0,0,0,.12);
+      transition: transform .3s, background .3s;
+    }
+    .toggle input:checked + .toggle-track { background: var(--mint2); border-color: var(--mint2); }
+    .toggle input:checked + .toggle-track::after { transform: translateX(24px); }
+    .on-red    .toggle input:checked + .toggle-track { background: var(--red-led);    border-color: var(--red-led); }
+    .on-green  .toggle input:checked + .toggle-track { background: var(--green-led);  border-color: var(--green-led); }
+    .on-yellow .toggle input:checked + .toggle-track { background: var(--yellow-led); border-color: var(--yellow-led); }
+
+    /* ── all buttons ── */
+    .all-btns { display: flex; gap: 10px; margin-bottom: 24px; }
+    .btn-pastel {
+      flex: 1; padding: 11px;
+      border: 2px solid var(--border);
+      border-radius: 14px;
+      font-family: 'Caveat', cursive;
+      font-size: 1rem; font-weight: 600;
+      cursor: pointer; transition: all .2s;
+      background: var(--white); color: var(--text);
+    }
+    .btn-on  { border-color: #b2f0d6; color: #2daa78; }
+    .btn-off { border-color: #ffc0cb; color: #e8294a; }
+    .btn-on:hover  { background: var(--mint);   box-shadow: 0 4px 12px rgba(86,197,150,.15); }
+    .btn-off:hover { background: var(--pink);   box-shadow: 0 4px 12px rgba(255,107,138,.15); }
+
+    /* ── sidebar ── */
+    .sidebar { display: flex; flex-direction: column; gap: 16px; }
+
+    /* ── card ── */
+    .s-card {
+      background: var(--white);
+      border-radius: 18px;
+      padding: 18px 20px;
+      border: 2px solid var(--border);
+    }
+    .s-card-title {
+      font-family: 'Caveat', cursive;
+      font-size: 1.15rem; font-weight: 600;
+      color: var(--purple2); margin-bottom: 14px;
+    }
+
+    /* status pills */
+    .status-pills { display: flex; flex-direction: column; gap: 8px; }
+    .pill {
+      display: flex; align-items: center; justify-content: space-between;
+      background: #faf6ff; border-radius: 10px;
+      padding: 8px 12px; font-size: .8rem;
+    }
+    .pill-label { color: var(--subtext); }
+    .pill-value { font-weight: 700; color: var(--text); font-family: 'Caveat', cursive; font-size: 1rem; }
+
+    /* ── log list ── */
+    .log-list { display: flex; flex-direction: column; gap: 7px; max-height: 260px; overflow-y: auto; }
+    .log-list::-webkit-scrollbar { width: 4px; }
+    .log-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+    .log-item {
+      display: flex; align-items: center; gap: 10px;
+      padding: 8px 10px; border-radius: 10px;
+      background: #faf6ff; font-size: .78rem;
+    }
+    .log-dot {
+      width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
+    }
+    .log-dot.on  { background: var(--green-led); box-shadow: 0 0 5px var(--green-led); }
+    .log-dot.off { background: #ffb3b3; }
+    .log-name  { font-weight: 700; color: var(--text); flex: 1; }
+    .log-state { font-weight: 600; font-size: .72rem; }
+    .log-state.on  { color: var(--green-led); }
+    .log-state.off { color: #e8294a; }
+    .log-time  { color: var(--subtext); font-size: .7rem; }
+
+    /* ── decoration ── */
+    .deco { text-align: center; margin-top: 8px; font-size: 1.5rem; opacity: .4; }
+
+    @media (max-width: 720px) {
+      .layout { grid-template-columns: 1fr; }
+      .page { padding: 0 16px 40px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- banner -->
+  <div class="banner">
+    <div class="banner-blob blob1"></div>
+    <div class="banner-blob blob2"></div>
+    <div class="banner-blob blob3"></div>
+    <div class="banner-blob blob4"></div>
+  </div>
+
+  <div class="page">
+    <div class="avatar">💡</div>
+    <h1 class="page-title">my lights ˚✧</h1>
+    <div class="page-sub">
+      <span id="espDot" class="offline-dot"></span>
+      <span id="espLabel">device offline</span>
+      &nbsp;·&nbsp;
+      <span id="espUptime">--:--:--</span>
+    </div>
+
+    <div class="layout">
+
+      <!-- left -->
+      <div>
+        <div class="sec-label">✦ lights</div>
+        <div class="led-cards" id="ledCards">
+          <!-- injected by JS -->
+        </div>
+
+        <div class="all-btns">
+          <button class="btn-pastel btn-on"  onclick="setAll('on')">☀️ all on</button>
+          <button class="btn-pastel btn-off" onclick="setAll('off')">🌙 all off</button>
+        </div>
+      </div>
+
+      <!-- right sidebar -->
+      <div class="sidebar">
+
+        <!-- status card -->
+        <div class="s-card">
+          <div class="s-card-title">˚ status</div>
+          <div class="status-pills" id="statusPills">
+            <!-- injected -->
+          </div>
+          <div class="deco">🐾</div>
+        </div>
+
+        <!-- log card -->
+        <div class="s-card">
+          <div class="s-card-title">✎ recent activity</div>
+          <div class="log-list" id="logList">
+            <div style="color:var(--subtext);font-size:.8rem;text-align:center;padding:10px">loading...</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+<script>
+const API = "api.php";
+
+const LEDS = [
+  { id:1, name:"red",    cls:"red",    hex:"#ff6b8a", emoji:"🔴" },
+  { id:2, name:"green",  cls:"green",  hex:"#56c596", emoji:"🟢" },
+  { id:3, name:"yellow", cls:"yellow", hex:"#ffc145", emoji:"🟡" },
+];
+
+const states = {1:"off", 2:"off", 3:"off"};
+
+// build cards
+const cardsEl = document.getElementById("ledCards");
+LEDS.forEach(l => {
+  cardsEl.innerHTML += `
+  <div class="led-card" id="card-${l.id}">
+    <div class="orb" onclick="toggleLed(${l.id})"></div>
+    <div class="led-info">
+      <div class="led-name">${l.emoji} ${l.name}</div>
+      <div class="led-state" id="lstate-${l.id}">off</div>
+    </div>
+    <label class="toggle">
+      <input type="checkbox" id="tog-${l.id}" onchange="setLed(${l.id}, this.checked?'on':'off')">
+      <span class="toggle-track"></span>
+    </label>
+  </div>`;
+});
+
+// build status pills
+const pillsEl = document.getElementById("statusPills");
+LEDS.forEach(l => {
+  pillsEl.innerHTML += `
+  <div class="pill">
+    <span class="pill-label">${l.name}</span>
+    <span class="pill-value" id="pill-${l.id}" style="color:var(--subtext)">off</span>
+  </div>`;
+});
+
+function updateCard(led, state) {
+  states[led.id] = state;
+  const card  = document.getElementById(`card-${led.id}`);
+  const tog   = document.getElementById(`tog-${led.id}`);
+  const lstat = document.getElementById(`lstate-${led.id}`);
+  const pill  = document.getElementById(`pill-${led.id}`);
+
+  card.className = `led-card${state==='on' ? ` on-${led.cls}` : ''}`;
+  tog.checked    = state === 'on';
+
+  lstat.textContent = state === 'on' ? '· on' : '· off';
+  lstat.className   = `led-state${state==='on' ? ' is-on' : ''}`;
+
+  pill.textContent  = state === 'on' ? 'on ✓' : 'off';
+  pill.style.color  = state === 'on' ? led.hex : 'var(--subtext)';
+}
+
+async function fetchAll() {
+  try {
+    const d = await (await fetch(`${API}?action=get_all`)).json();
+    d.leds.forEach(row => {
+      const l = LEDS.find(x => x.id == row.id);
+      if (l) updateCard(l, row.state);
+    });
+  } catch(e) {}
+}
+
+async function fetchStatus() {
+  try {
+    const d = await (await fetch(`${API}?action=get_status`)).json();
+    const dot   = document.getElementById('espDot');
+    const label = document.getElementById('espLabel');
+    const up    = document.getElementById('espUptime');
+    if (d.last_seen) {
+      const diff = (Date.now() - new Date(d.last_seen).getTime()) / 1000;
+      const online = diff < 30;
+      dot.className   = online ? 'online-dot' : 'offline-dot';
+      label.textContent = online ? 'device online ˚' : 'device offline';
+      const u=parseInt(d.uptime), h=Math.floor(u/3600), m=Math.floor((u%3600)/60), s=u%60;
+      up.textContent = `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+    }
+  } catch(e) {}
+}
+
+async function fetchLogs() {
+  try {
+    const logs = await (await fetch(`${API}?action=get_logs`)).json();
+    const el = document.getElementById('logList');
+    el.innerHTML = logs.length
+      ? logs.map(l => {
+          const led = LEDS.find(x => x.id == l.led_id);
+          return `<div class="log-item">
+            <span class="log-dot ${l.state}"></span>
+            <span class="log-name">${led?.emoji || ''} ${l.name?.toLowerCase()}</span>
+            <span class="log-state ${l.state}">${l.state}</span>
+            <span class="log-time">${l.timestamp.substring(11,16)}</span>
+          </div>`;
+        }).join('')
+      : `<div style="color:var(--subtext);font-size:.8rem;text-align:center;padding:10px">no activity yet ˚</div>`;
+  } catch(e) {}
+}
+
+async function toggleLed(id) {
+  await setLed(id, states[id] === 'on' ? 'off' : 'on');
+}
+
+async function setLed(id, state) {
+  await fetch(`${API}?action=set_state`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ led_id: id, state })
+  });
+  fetchAll(); fetchLogs();
+}
+
+async function setAll(state) {
+  await fetch(`${API}?action=set_state`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ led_id: 0, state })
+  });
+  fetchAll(); fetchLogs();
+}
+
+fetchAll(); fetchStatus(); fetchLogs();
+setInterval(fetchAll,    3000);
+setInterval(fetchStatus, 8000);
+setInterval(fetchLogs,   5000);
+</script>
+</body>
+</html>
